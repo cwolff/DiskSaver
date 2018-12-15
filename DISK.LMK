@@ -1,0 +1,97 @@
+#
+# Macro definition
+#
+
+DIR=\\ds
+CC1=cc1
+CC2=if not errorlevel 1 cc2
+ASM=masm
+CC1FLAGS=-i
+CC2FLAGS=-o
+HEAD=$(DIR)
+SYSHEAD=\\include
+OBJ=$(DIR)
+SYSOBJ=\\obj
+PROD=$(DIR)
+SYSLIB=\\lib
+MODEL=s
+
+#
+# Make disk
+#
+
+ds.exe: $(OBJ)\\ds.obj $(OBJ)\\ds_sctr.obj $(OBJ)\\ds_view.obj
+ds.exe: $(OBJ)\\ds_menu.obj $(OBJ)\\ds_show.obj $(OBJ)\\ds_print.obj
+ds.exe: $(OBJ)\\ds_key.obj $(OBJ)\\ds_io.obj $(OBJ)\\ds_glbl.obj
+ds.exe: $(OBJ)\\ds_video.obj
+	link @disk.lnk,$(PROD)\\ds,nul,$(SYSLIB)\\lc$(MODEL);
+
+$(OBJ)\\ds.obj: ds.c $(HEAD)\\disk.h
+	del ds.obj
+	$(CC1) ds $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_sctr.obj: ds_sctr.c $(HEAD)\\disk.h
+	del ds_sctr.obj
+	$(CC1) ds_sctr $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_sctr $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_view.obj: ds_view.c $(HEAD)\\disk.h
+	del ds_view.obj
+	$(CC1) ds_view $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_view $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_menu.obj: ds_menu.c $(HEAD)\\disk.h
+	del ds_menu.obj
+	$(CC1) ds_menu $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_menu $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_show.obj: ds_show.c $(HEAD)\\disk.h
+	del ds_show.obj
+	$(CC1) ds_show $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_show $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_print.obj: ds_print.c $(HEAD)\\disk.h
+	del ds_print.obj
+	$(CC1) ds_print $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_print $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_key.obj: ds_key.c $(HEAD)\\disk.h
+	del ds_key.obj
+	$(CC1) ds_key $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_key $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_io.obj: ds_io.c $(HEAD)\\disk.h
+	del ds_io.obj
+	$(CC1) ds_io $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_io $(CC2FLAGS)$(OBJ)\\
+
+$(OBJ)\\ds_glbl.obj: ds_glbl.c
+	del ds_glbl.obj
+	$(CC1) ds_glbl $(CC1FLAGS)$(HEAD)\\ $(CC1FLAGS)$(SYSHEAD)\\
+	$(CC2) ds_glbl $(CC2FLAGS)$(OBJ)\\
+ 
+$(OBJ)\\ds_video.obj: ds_video.asm
+	del ds_video.obj
+	$(ASM) ds_video.asm,ds_video.obj;
+
+backup:
+	cls
+	pause Insert disksave backup disk
+	lsf a:
+	del a:*.*
+	copy ds.c a:
+	copy ds_sctr.c a:
+	copy ds_view.c a:
+	copy ds_menu.c a:
+	copy ds_show.c a:
+	copy ds_print.c a:
+	copy ds_key.c a:
+	copy ds_io.c a:
+	copy ds_glbl.c a:
+	copy disk.h a:
+	copy ds.exe a:
+	copy disk.lnk a:
+	copy disk.lmk a:
+
+
